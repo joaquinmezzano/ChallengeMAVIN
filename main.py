@@ -54,7 +54,28 @@ def ask():
 def requires_web_search(query):
     query = query.lower()
 
-    keywords = ["today", "current", "currently" "last", "latest", "now", "happening now", "recent", "update", "updated", "still", "alive", "died", "dead", "news"]
+    keywords = [
+    # Temporales
+    "today", "yesterday", "this year", "this week", "this month", "last year", "last week", "last month", "current", "currently", "now", "right now", "just now", "as of now", "latest", "recent", "recently", "updated", "update", "breaking", "breaking news", "happening now", "ongoing", "live", "new",
+
+    # Estados de personas u organizaciones
+    "alive", "passed away", "hospitalized", "health update", "condition", "status update",
+
+    # Gobierno y política
+    "election", "elections", "election results", "new president", "new prime minister", "new leader", "who is in charge", "who is the actual",
+
+    # Eventos actuales
+    "news", "in the news", "headlines", "trending", "viral", "protests", "protest",
+
+    # Economía y finanzas
+    "stock price", "stock market", "bitcoin price", "crypto price", "inflation rate", "actual price", "interest rate", "exchange rate", "market update",
+
+    # Deporte
+    "match result", "score", "game result",
+
+    # Tecnología o lanzamientos
+    "release date", "launch date", "new version", "new update", "patch", "announcement", "product launch", "latest model"
+]
 
     if re.search(r"\b(today|yesterday|this year|this month|this week|now)\b", query):
         return True
