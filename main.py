@@ -25,12 +25,31 @@ tools = [
 # Modelo Ollama
 model = OllamaLLM(model="gemma2:2b")
 
+# Prompt para control
+prompt = """
+You are a helpful assistant running on a local model (Ollama).
+You should first try to answer the question using only your own knowledge.
+Only if the question is clearly about recent events or unknown facts (e.g., "Who won the 2024 election?", "What's the weather today?", etc.), then use the tool called "Search".
+
+Examples:
+Q: What is the capital of France?
+A: (Use own knowledge)
+
+Q: Who is the current president of the USA?
+A: (Use 'Search' because it's recent)
+
+Do NOT use 'Search' unless absolutely necessary.
+"""
+
 # Agente con Ollama + SerpAPI
 agent = initialize_agent(
     tools=tools,
     llm=model,
     agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
-    verbose=True #Imprime el razonamiento del agente, sirve para debugear
+    verbose=True, #Imprime el razonamiento del agente, sirve para debugear
+    agent_kwargs={
+        "system_message": prompt
+    }
 )
 
 # Mediante Flask preguntamos al agente y nos devuelve un JSON con la respuesta
