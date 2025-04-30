@@ -5,6 +5,7 @@ from langchain.agents import Tool, initialize_agent #Contruir y usar el agente
 from langchain.agents.agent_types import AgentType #Elegir el tipo de agente
 import getpass
 import os
+import re
 
 app = Flask(__name__) # Instancia de Flask, inicializa el backend
 
@@ -18,38 +19,19 @@ tools = [
     Tool(
         name="Search",
         func=search.run, #Utiliza la función search de SerpAPI
-        description="Useful for answering questions about current events or factual data from the web." #Prompt interno del agente para decidir si usar esta herramienta o no.
+        description="Useful for answering questions about current events or factual data from the web."
     )
 ]
 
 # Modelo Ollama
-model = OllamaLLM(model="gemma2:2b")
-
-# Prompt para control
-prompt = """
-You are a helpful assistant running on a local model (Ollama).
-You should first try to answer the question using only your own knowledge.
-Only if the question is clearly about recent events or unknown facts (e.g., "Who won the 2024 election?", "What's the weather today?", etc.), then use the tool called "Search".
-
-Examples:
-Q: What is the capital of France?
-A: (Use own knowledge)
-
-Q: Who is the current president of the USA?
-A: (Use 'Search' because it's recent)
-
-Do NOT use 'Search' unless absolutely necessary.
-"""
+model = OllamaLLM(model="mistral:7b")
 
 # Agente con Ollama + SerpAPI
 agent = initialize_agent(
     tools=tools,
     llm=model,
     agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
-    verbose=True, #Imprime el razonamiento del agente, sirve para debugear
-    agent_kwargs={
-        "system_message": prompt
-    }
+    verbose=True #Imprime el razonamiento del agente, sirve para debugear
 )
 
 # Mediante Flask preguntamos al agente y nos devuelve un JSON con la respuesta
@@ -60,10 +42,24 @@ def ask():
     if not query:
         return jsonify({"error": "No query provided"}), 400
     try:
-        result = agent.run(query) # Intenta ejecutar el agente con el query recibido
-        return jsonify({"response": result}) # Retorna la respuesta del agente en formato json
+        if requires_web_search(query):
+            search_response = agent.run(query) # Intenta ejecutar el agente con el query recibido
+            return jsonify({"response": search_response, "source": "serpapi"}) # Retorna la respuesta del agente en formato json
+
+        local_response = model(query)        
+        return jsonify({"response": local_response, "source": "ollama"})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+def requires_web_search(query):
+    query = query.lower()
+
+    keywords = ["today", "current", "currently" "last", "latest", "now", "happening now", "recent", "update", "updated", "still", "alive", "died", "dead", "news"]
+
+    if re.search(r"\b(today|yesterday|this year|this month|this week|now)\b", query):
+        return True
+
+    return any(key in query for key in keywords)
 
 if __name__ == "__main__":
     app.run(debug=True)
