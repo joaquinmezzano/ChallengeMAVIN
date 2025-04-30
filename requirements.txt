@@ -1,0 +1,5 @@
+flask
+langchain
+langchain-ollama
+langchain-community
+google-search-results

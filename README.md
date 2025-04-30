@@ -9,38 +9,49 @@ Your goal is to design and develop a backend application using Python for execut
 
 ## 1. Herramientas utilizadas
 - Python3
-- LangChain *(Framework para desarrollar aplicaciones con LLMs como crear agentes, chatbots, entre otros)*
-- Ollama *(Para correr nuestro modelo localmente)*
-- SerpAPI *(Herramienta de búsqueda en caso de necesitar información actual)*
-- Flask *(Mini-framework que utilizo para construir APIs backend)*
+- LangChain
+- Ollama
+    - Modelo: Mistral
+- SerpAPI
+- Flask
 
 ## 2. Pre-requisitos
-- Sistema operativo de tipo Linux/Ubuntu.
+- Sistema operativo Ubuntu.
 - Python3.
 
 ## 3. Pasos de instalación
 ##### 3.1 - Entorno y librerias de Python
+Creamos el entorno de Python:
 > `python -m venv venv`
+
+Entramos en el entorno de Python:
 > `source venv/bin/activate`
-> `pip install -U langchain-community langgraph langchain-anthropic tavily-python langgraph-checkpoint-sqlite`
-> `pip install langchain langchain-ollama langchain-chroma`
-> `pip install google-search-results`
-> `pip install flask`
+
+Instalamos las dependencias:
+> `pip install -r requirements.txt`
 
 ##### 3.2 - Ollama
+Instalamos curl:
 > `sudo apt install curl`
+
+Bajamos el paquete de Ollama y lo instalamos con curl:
 > `curl -fsSL https://ollama.com/install.sh | sh`
-> `ollama -v` --> para comprobar la instalación
-> `ollama pull gemma2:2b`
-> `ollama run gemma2:2b` --> para probar el modelo
+
+Comprobamos que Ollama este instalado correctamente:
+> `ollama -v`
+
+Bajamos el modelo que vamos a utilizar:
+> `ollama pull mistral:7b`
 
 ## 4. Pasos de ejecución
-##### 4.1 - Iniciar los servidores de Ollama y de Flask
+En una primer consola ejecutamos el servidor de Ollama:
 > `ollama serve`
+
+En una segunda consola entramos en el entorno de Python y ejecutamos el archivo main.py:
 > `source venv/bin/activate`
-> `python3 main.py`
- 
-##### 4.2 - Lanzar un curl (5000 puerto default) en otra terminar para probar funcionamiento:
+>> `python3 main.py`
+
+En una tercer consola usamos curl para tirar un POST con la pregunta que queremos (cambiando el query por nuestra pregunta):
 > `curl -X POST http://localhost:5000/ask -H "Content-Type: application/json" -d '{"query": "What is the capital of Argentina?"}'`
 
 ## 5. Documentation
