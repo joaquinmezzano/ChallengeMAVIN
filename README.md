@@ -41,7 +41,7 @@ Your goal is to design and develop a backend application using Python for execut
 > `python3 main.py`
  
 ##### 4.2 - Lanzar un curl (5000 puerto default) en otra terminar para probar funcionamiento:
-> `curl -X POST http://localhost:5000/ask -H "Content-Type: application/json" -d '{"model": "gemma2:2b", "query": "What is the capital of Argentina?"}'`
+> `curl -X POST http://localhost:5000/ask -H "Content-Type: application/json" -d '{"query": "What is the capital of Argentina?"}'`
 
 ## 5. Documentation
 - LangChain: https://python.langchain.com/docs/introduction/
