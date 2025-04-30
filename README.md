@@ -61,10 +61,12 @@ Your goal is to design and develop a backend application using Python for execut
 
 ## 6. Problemas encontrados
 - Evitar que las API key utilizadas (como la de SerpAPI) esten hardcodeadas
-    - **SOLUCIÓN**: Utilización de getpass para evitarlo.
+    - **SOLUCIÓN:** Utilización de getpass para evitarlo.
 - getpass es requerido cada vez que se ejecuta el programa.
-    - **SOLUCIÓN**:
+    - **SOLUCIÓN:**
 - Definir que tipo de agente utilizar.
-    - **SOLUCIÓN**: Elegi "ZERO_SHOT_REACT_DESCRIPTION" debido a que hace un razonamiento antes de dar una respuesta.
-- Creo que siempre busca la respuesta por SerpAPI en lugar de preguntar localmente a Ollama.
-    - **SOLUCIÓN**: 
+    - **SOLUCIÓN:** Elegi "ZERO_SHOT_REACT_DESCRIPTION" debido a que hace un razonamiento en cada paso antes de dar una respuesta final.
+- Siempre busca la respuesta por SerpAPI en lugar de preguntar localmente a Ollama (Esto resulto ser un problema muy común al trabajar con este tipo de ejercicio)
+    - **POSIBLE SOLUCIÓN 1:** Añadir un prompt para darle al agente apenas se inicie para que solo utilice Search cuando sea realmente necesario. El problema es que el tipo de agente que utilizamos directamente ignora esto y siempre llama a Search.
+    - **POSIBLE SOLUCIÓN 2:** Utilizar otro tipo de agente como "OPENAI_FUNCTIONS" pero el problema es que este utiliza modelos que son de pago para funcionar ya que este agente no soporta modelos de Ollama.
+    - **POSIBLE SOLUCIÓN 3:** Utilizar una función auxiliar para que detecte si estamos ante una pregunta sobre actualidad (respondemos utilizando SerpAPI) u otro tipo de pregunta (respondemos utilizando el modelo local de Ollama). Esto se resuelve utilizando keywords y comprobando si la pregunta tiene estas mismas. **ESTA FUE LA OPCIÓN QUE ELEGI.**
