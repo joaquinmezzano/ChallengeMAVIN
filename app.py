@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from agent import agent, model, requires_web_search
+from agent import agent, model
 
 app = Flask(__name__) # Instancia de Flask, inicializa el backend
 
@@ -11,12 +11,8 @@ def ask():
     if not query:
         return jsonify({"error": "No query provided"}), 400
     try:
-        if requires_web_search(query):
-            search_response = agent.run(query) # Intenta ejecutar el agente con el query recibido
-            return jsonify({"response": search_response, "source": "serpapi"}) # Retorna la respuesta del agente en formato json
-
-        local_response = model(query)        
-        return jsonify({"response": local_response, "source": "ollama"})
+        response = agent.run(query)        
+        return jsonify({"response": response})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
