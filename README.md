@@ -72,6 +72,7 @@ In a third terminal, use *curl* to make a POST request with your question (repla
     - https://flask.palletsprojects.com/en/stable/
     - https://flask.palletsprojects.com/en/stable/quickstart/
 - ChatGPT y Google: used for generating trivial elements (keywords), research (suotable libraries/frameworks) and troubleshooting technical issues (library incompatibilities, installation errors)
+- Canva: template search and diagram design.
 
 ## 6. Problemas encontrados
 > **ISSUE:** Avoid hardcoding API keys (SerpAPI)  
