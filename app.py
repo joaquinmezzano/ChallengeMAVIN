@@ -1,13 +1,12 @@
 from flask import Flask, request, jsonify
-from agent import agent, model
+from agent import agent
 
-app = Flask(__name__) # Instancia de Flask, inicializa el backend
+app = Flask(__name__)
 
-# Mediante Flask preguntamos al agente y nos devuelve un JSON con la respuesta
 @app.route('/ask', methods=['POST'])
 def ask():
     data = request.json
-    query = data.get("query", "") # Espera un valor query en el json extraido en data, usando "" como default
+    query = data.get("query", "")
     if not query:
         return jsonify({"error": "No query provided"}), 400
     try:
