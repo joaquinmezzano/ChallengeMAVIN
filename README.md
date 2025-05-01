@@ -49,12 +49,12 @@ En una primer consola ejecutamos el servidor de Ollama:
 
 En una segunda consola entramos en el entorno de Python y ejecutamos el archivo main.py:
 > `source venv/bin/activate`
->> `python3 main.py`
+>> `python3 app.py`
 
 En una tercer consola usamos curl para tirar un POST con la pregunta que queremos (cambiando el query por nuestra pregunta):
 > `curl -X POST http://localhost:5000/ask -H "Content-Type: application/json" -d '{"query": "What is the capital of Argentina?"}'`
 
-## 5. Documentation
+## 5. Documentation & Resources
 - LangChain: https://python.langchain.com/docs/introduction/
 - Building an Agent: 
     - https://python.langchain.com/docs/tutorials/agents/
@@ -65,19 +65,25 @@ En una tercer consola usamos curl para tirar un POST con la pregunta que queremo
 - Ollama & LangChain integration: https://python.langchain.com/docs/integrations/llms/ollama/
 - Ollama & Agents integration: https://python.langchain.com/api_reference/langchain/agents/langchain.agents.initialize.initialize_agent.html
 - Gemma2: https://ollama.com/library/gemma2:2b
-- SerpAPI: https://python.langchain.com/docs/integrations/tools/serpapi/
+- SerpAPI: 
+    - https://python.langchain.com/docs/integrations/tools/serpapi/
+    - https://serpapi.com/dashboard
 - Flask:
     - https://flask.palletsprojects.com/en/stable/
     - https://flask.palletsprojects.com/en/stable/quickstart/
+- ChatGPT y Google: generación de elementos triviales (como las keyword), investigación (ver framworks/librerias que me servian) y resolución de problemas técnicos (mal funcionamiento entre librerias, errores de instalación, etc.)
 
 ## 6. Problemas encontrados
 - Evitar que las API key utilizadas (como la de SerpAPI) esten hardcodeadas
     - **SOLUCIÓN:** Utilización de getpass para evitarlo.
 - getpass es requerido cada vez que se ejecuta el programa.
-    - **SOLUCIÓN:**
+    - **SOLUCIÓN:** 
 - Definir que tipo de agente utilizar.
     - **SOLUCIÓN:** Elegi "ZERO_SHOT_REACT_DESCRIPTION" debido a que hace un razonamiento en cada paso antes de dar una respuesta final.
 - Siempre busca la respuesta por SerpAPI en lugar de preguntar localmente a Ollama (Esto resulto ser un problema muy común al trabajar con este tipo de ejercicio)
     - **POSIBLE SOLUCIÓN 1:** Añadir un prompt para darle al agente apenas se inicie para que solo utilice Search cuando sea realmente necesario. El problema es que el tipo de agente que utilizamos directamente ignora esto y siempre llama a Search.
     - **POSIBLE SOLUCIÓN 2:** Utilizar otro tipo de agente como "OPENAI_FUNCTIONS" pero el problema es que este utiliza modelos que son de pago para funcionar ya que este agente no soporta modelos de Ollama.
     - **POSIBLE SOLUCIÓN 3:** Utilizar una función auxiliar para que detecte si estamos ante una pregunta sobre actualidad (respondemos utilizando SerpAPI) u otro tipo de pregunta (respondemos utilizando el modelo local de Ollama). Esto se resuelve utilizando keywords y comprobando si la pregunta tiene estas mismas. **ESTA FUE LA OPCIÓN QUE ELEGI.**
+
+## 7. Posibles problemas a la implementación actual
+- Que la pregunta sea sobre algo que necesita información actual pero que se saltee las keywords, haciendo que Ollama responda (con información desactualizada) en lugar de hacer web scrapping con SerpAPI.
