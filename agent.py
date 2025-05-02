@@ -24,9 +24,17 @@ tools = [
     )
 ]
 
+system_prompt = """
+You are a helpful AI assistant. First, try to answer based on your own knowledge ("Local Search" Tool). Only use the "Web Search" tool if the question is clearly about something that happened very recently or is not known to the general public.
+These are your only Tools, do not attempt to use any others.
+If possible aim to provide detailed and well-developed answers.
+"""
+
 agent = initialize_agent(
     tools=tools,
     llm=model,
     agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
-    verbose=True
+    verbose=True,
+    agent_kwargs={"system_message": system_prompt},
+    handle_parsing_errors=True
 )
