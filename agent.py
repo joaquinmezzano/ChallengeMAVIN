@@ -9,8 +9,8 @@ if not os.environ.get("SERPAPI_API_KEY"):
     os.environ["SERPAPI_API_KEY"] = getpass.getpass("Enter API key for SERPAPI: ")
 
 model = OllamaLLM(model="mistral:7b")
-
 search = SerpAPIWrapper()
+
 tools = [
     Tool(
         name="Web search",
@@ -25,7 +25,7 @@ tools = [
 ]
 
 system_prompt = """
-You are a helpful AI assistant. First, try to answer based on your own knowledge ("Local Search" Tool). Only use the "Web Search" tool if the question is clearly about something that happened very recently or is not known to the general public.
+You are a helpful AI assistant. First, try to answer based on your own knowledge, using the "Local search" tool. Only use the "Web search" tool if the question is clearly about something that happened very recently or is not known to the general public.
 These are your only Tools, do not attempt to use any others.
 If possible aim to provide detailed and well-developed answers.
 """
